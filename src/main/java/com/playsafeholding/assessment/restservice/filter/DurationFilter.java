@@ -1,0 +1,51 @@
+package com.playsafeholding.assessment.restservice.filter;
+
+import java.io.IOException;
+
+import javax.servlet.Filter;
+import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.annotation.WebFilter;
+import javax.servlet.http.HttpServletRequest;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
+
+/**
+ * Filter to measure the execution duration of servlet requests.
+ * 
+ * @author daviddrazic
+ *
+ */
+
+@Component
+@WebFilter("/*")
+public class DurationFilter implements Filter {
+	private static final Logger LOGGER = LoggerFactory.getLogger(DurationFilter.class);
+	
+	@Override
+    public void init(FilterConfig filterConfig) throws ServletException {
+        // empty
+    }
+
+	@Override
+	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+			throws IOException, ServletException {
+        long time = System.currentTimeMillis();
+        try {
+            chain.doFilter(request, response);
+        } finally {
+            time = System.currentTimeMillis() - time;
+            LOGGER.info("Execution Duration: {}: {} ms ", ((HttpServletRequest) request).getRequestURI(),  time);
+        }
+	}
+	
+	@Override
+    public void destroy() {
+        // empty
+    }
+}
