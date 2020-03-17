@@ -28,11 +28,6 @@ public class DurationFilter implements Filter {
 	private static final Logger LOGGER = LoggerFactory.getLogger(DurationFilter.class);
 	
 	@Override
-    public void init(FilterConfig filterConfig) throws ServletException {
-        // empty
-    }
-
-	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
         long time = System.currentTimeMillis();
@@ -43,9 +38,4 @@ public class DurationFilter implements Filter {
             LOGGER.info("Execution Duration: {}: {} ms ", ((HttpServletRequest) request).getRequestURI(),  time);
         }
 	}
-	
-	@Override
-    public void destroy() {
-        // empty
-    }
 }
